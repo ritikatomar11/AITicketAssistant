@@ -18,9 +18,7 @@ function TicketDetailsPage() {
       const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/tickets/${id}` , 
         {
           method:"GET" , 
-          headers:{
-            Authorization:`Bearer ${token}`,
-          },
+          credentials:"include"
 
         }
       ); 

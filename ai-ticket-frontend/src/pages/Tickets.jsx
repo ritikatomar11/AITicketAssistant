@@ -6,13 +6,12 @@ function Tickets() {
   const [tickets , setTickets] = useState([]);
   const [loading , setLoading] = useState(false); 
 
-  const token = localStorage.getItem("token");
   
   const fetchTickets = async()=>{
     try {
-      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/tickets` , {
-        headers:{Authorization : `Bearer ${token}`} , 
+      const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/tickets` , { 
         method:"GET" , 
+        credentials:"include"
       }); 
       const data = await res.json(); 
       console.log(data)
@@ -36,9 +35,10 @@ function Tickets() {
     try{
       const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/tickets` , 
       {  method:"POST" , 
+        credentials:"include",
         headers:{
           "Content-Type" : "application/json" , 
-          Authorization : `Bearer ${token}` , 
+        
         } ,
         body:JSON.stringify(form) , 
       }

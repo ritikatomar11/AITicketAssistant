@@ -9,7 +9,7 @@ function AdminPanel() {
   const [formData , setFormData] = useState({role :"" , skills:""})
   const [searchQuery , setSearchQuery] = useState(''); 
 
-  const token = localStorage.getItem("token"); 
+  
 
   useEffect(()=>{
     fetchUsers(); 
@@ -18,9 +18,9 @@ function AdminPanel() {
   const fetchUsers = async()=>{
       try {
         const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/auth/users` , {
-          headers:{
-            Authorization:`Bearer ${token}`,
-          }
+          method:"GET",
+          credentials:"include"
+         
         }); 
         console.log("res" , res); 
         const data = await res.json(); 
@@ -52,8 +52,8 @@ function AdminPanel() {
           method:"POST" , 
           headers:{
             "Content-Type":"application/json",
-            Authorization : `Bearer ${token}`
           },
+          credentials:"include" ,
           body:JSON.stringify({
           email:editingUser , 
           role:formData.role ,

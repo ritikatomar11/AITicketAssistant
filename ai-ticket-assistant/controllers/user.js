@@ -29,15 +29,24 @@ export const signup = async(req , res)=>{
                 email 
             }
     }); 
-    const token = jwt.sign(
-        {_id : user._id , rolw : user.role} 
-        , process.env.JWT_SECRET , 
-        {expiresIn:"2d"}
-    );
+    console.log("I am here")
     const signedUpUser = await User.findOne({email}).select("-password"); 
+    console.log(signedUpUser);
+    const token = signedUpUser.generateToken(); 
+    console.log(token); 
+    if (!token) {
+        console.log("NHi chal rha main")
+        return res.status(status.INTERNAL_SERVER_ERROR).json({error:"Something went wrong while generating tokens"}); 
+    }
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
     return res
         .status(status.CREATED)
-        .json({user:signedUpUser , token})
+        .cookie("token" , token , options)
+        .json({user:signedUpUser})
+
     }catch(error){
         res
             .status(500)
@@ -64,11 +73,19 @@ export const login = async(req , res )=>{
             return res.status(401).json({error: "Invalid credentials"})
         }
 
-        const token = jwt.sign(
-            {_id:user._id , role:user.role} , 
-            process.env.JWT_SECRET
-        ); 
-        res.json({user , token}); 
+        const token = user.generateToken() ; 
+        console.log(token); 
+        if (!token) {
+            return res.status(status.INTERNAL_SERVER_ERROR).json({error:"Something went wrong while generating tokens"}); 
+        }
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
+        res
+            .status(status.OK)
+            .cookie("token" , token , options)
+            .json({user , token}); 
     } catch (error) {
         res
             .status(500)
@@ -90,7 +107,8 @@ export const logout = async(req , res )=>{
         })
 
         res
-        .status(status.OK)
+        .status(200)
+        .clearCookie("token", options)
         .json({message:"Logout successfully"});
     }catch(error){
         res

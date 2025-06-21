@@ -26,7 +26,9 @@ export const createTicket = async(req ,res)=>{
                 createdBy:req.user._id.toString()
             }
         }); 
-        return res.status(status.OK).json({message:"Ticket created and processing started " , 
+        return res
+            .status(status.OK)
+            .json({message:"Ticket created and processing started " , 
             ticket:newTicket
         })
         

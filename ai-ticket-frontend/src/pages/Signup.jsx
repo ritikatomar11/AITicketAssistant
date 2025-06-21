@@ -26,17 +26,20 @@ function Signup() {
           headers:{
             "Content-Type":"application/json" 
           } , 
+          credentials:"include",
           body:JSON.stringify(form),
         }
       )
+      console.log(res)
       const data = await res.json(); 
+      console.log(data); 
       if(res.ok){
         setForm({email:"" , password:"" , role:"" , skills:""}); 
-        localStorage.setItem("token",data.token); 
+        // localStorage.setItem("token",data.token); 
         localStorage.setItem("user" , JSON.stringify(data.user)); 
         navigate("/"); 
       }else{
-        alert(data.message ||"Signup failed")
+        alert(data.error ||"Signup failed")
       }
     }catch(error){
       alert("Something went wrong");

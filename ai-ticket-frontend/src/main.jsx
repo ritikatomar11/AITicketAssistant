@@ -8,11 +8,16 @@ import Tickets from './pages/Tickets.jsx'
 import Login from "./pages/Login.jsx"
 import Signup from "./pages/Signup.jsx"
 import AdminPanel from './pages/Admin.jsx'
+import MainPage from './pages/MainPage.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={
+
+        {/* <Route path='/' element={
+          <MainPage/>
+        }/> */}
+        <Route path='/tickets' element={
           <CheckAuth protected={true}>
             <Tickets/>
           </CheckAuth>
@@ -22,6 +27,7 @@ createRoot(document.getElementById('root')).render(
             <TicketDetailsPage/>
           </CheckAuth>
         }/>
+        
         <Route path='/login' element={
           <CheckAuth protected={false}>
             <Login/>

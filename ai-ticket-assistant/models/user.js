@@ -1,4 +1,6 @@
 import mongoose from "mongoose"
+import jwt from "jsonwebtoken"
+
 
 const userSchema = new mongoose.Schema({
     email : {type : String , required : true , unique : true} , 
@@ -7,4 +9,14 @@ const userSchema = new mongoose.Schema({
     skills : {String} , 
     createdAt : {type :Date , default : Date.now} , 
 })
+
+//for generating tokens - custom method
+userSchema.methods.generateToken = function (){
+    return jwt.sign(
+        {_id : this._id , role : this.role} 
+        , process.env.JWT_SECRET , 
+        {expiresIn:"2d"}
+    );
+}
+
 export default mongoose.model("User" , userSchema); 

@@ -23,14 +23,16 @@ function Login() {
             "Content-Type":"application/json" , 
           }, 
           body:JSON.stringify(form),
-        }
+          credentials : "include"
+
+        },
       )
 
       const data = await res.json();
 
       if(res.ok){
         setForm({email:"" , password:""}); 
-        localStorage.setItem("token" , data.token);
+        // localStorage.setItem("token" , data.token);
         localStorage.setItem("user" ,JSON.stringify(data.user));
        setLoading(false); 
         navigate("/");
